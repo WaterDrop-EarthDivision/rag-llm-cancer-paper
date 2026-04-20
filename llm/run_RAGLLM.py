@@ -181,21 +181,21 @@ class PipelineRunner:
 # ================== MAIN ==================
 def main(args):
     
-    print(f"CSV path: {args.csv_path}")
-    print(f"Model type: {args.model_type}")
-    print(f"Model API endpoint: {args.model_api}")
-    print(f"Context DB: {args.context_db}")
-    print(f"Prompt strategy: {args.strategy}")
-    print(f"Number of iterations: {args.num_iter}")
-    print(f"Random seed: {args.random_seed}")
-    print(f"Temperature: {args.temp}")
-    print(f"Output name: {args.output_dir}")
+    print(f"CSV path: {args.csv_path}") # data/latest_db/moalmanac_fda_core_query__2025-10-03.csv 
+    print(f"Model type: {args.model_type}")# gpt
+    print(f"Model API endpoint: {args.model_api}") # gpt-4o-2024-08-06
+    print(f"Context DB: {args.context_db}") # fda
+    print(f"Prompt strategy: {args.strategy}")  # 0
+    print(f"Number of iterations: {args.num_iter}") # 5
+    print(f"Random seed: {args.random_seed}")   # 2025
+    print(f"Temperature: {args.temp}")          # 0
+    print(f"Output name: {args.output_dir}")    # output/RAG_res_gpt4o_default/structured_synthetic_db_v202510_hybrid_numvec25
 
     # Prepare output directories
     os.makedirs(name=args.output_dir, exist_ok=True)
 
     # Model config
-    load_dotenv()
+    load_dotenv()   # 加载模型
     
     if args.model_type == 'mistral-7b':
         model_path = "mistralai/Mistral-7B-Instruct-v0.3"
@@ -219,29 +219,29 @@ def main(args):
             raise ValueError("Missing API key. Please set MISTRAL_API_KEY in your .env file.")
         _CLIENT=MistralClient(api_key=api_key)
         
-    elif args.model_type in ['gpt', 'gpt_reasoning']:
+    elif args.model_type in ['gpt', 'gpt_reasoning']:       # 使用的是gpt
         _MODEL = args.model_api #this could be gpt-4o-2024-05-13, gpt-4o-mini-2024-07-18, etc.
         _MODEL_EMBED = 'text-embedding-3-small'
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
             raise ValueError("Missing API key. Please set OPENAI_API_KEY in your .env file.")
-        _CLIENT=OpenAI(api_key=api_key)
+        _CLIENT=OpenAI(api_key=api_key) # 初始化客户端
         
     else: 
         raise ValueError("Invalid model_type. Please choose from: mistral-7b, mistral, gpt")
     
-    # Check db latest version and load version
-    sync_db(org=args.context_db)
-    _VERSION = get_local_version()
+    # Check db latest version and load version  检查数据库的最新版本并加载该版本
+    sync_db(org=args.context_db)    # 更新数据库 data/latest_db/moalmanac_fdr_core__{version}.csv
+    _VERSION = get_local_version()  # 获取当前数据库
     
     # Load context db
-    _CONTEXT, _INDEX = load_context(
+    _CONTEXT, _INDEX = load_context(    # 加载 治疗数据库 和 index
         version=_VERSION, 
         db=args.context_db,
         db_type=args.context_db_type
         )
         
-    # Load db and query entities
+    # Load db and query entities  加载数据库并查询实体
     _DB_ENTITY, _QUERY_ENTITY = load_entities(
         version=_VERSION, 
         mode='test_realworld', 

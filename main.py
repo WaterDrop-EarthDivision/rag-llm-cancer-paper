@@ -1,3 +1,17 @@
+'''
+Description: 
+Author: Chenglin Cai
+Date: 2026-04-20 22:40:40
+LastEditTime: 2026-04-20 22:56:10
+LastEditors:  
+'''
+'''
+Description: 
+Author: Chenglin Cai
+Date: 2026-04-20 22:40:40
+LastEditTime: 2026-04-20 22:50:14
+LastEditors:  
+'''
 import argparse
 import subprocess
 from llm.run_LLM import main as run_llm_main
@@ -23,13 +37,22 @@ def parse_args():
     parser.add_argument('--random_seed', type=int, default=None, help="Random seed used for LLM inference [default: None]")
     return parser.parse_args()
     
+# ~/rag-llm-cancer-paper$ python main.py --mode=rag-llm \
+# --csv_path=data/latest_db/moalmanac_fda_core_query__2025-10-03.csv \
+# --model_type=gpt --model_api=gpt-4o-2024-08-06 \
+# --context_db=fda --context_db_type=structured \
+# --hybrid_search \
+# --num_iter=5 \
+# --strategy=0 \
+# --output_dir=output/RAG_res_gpt4o_default/structured_synthetic_db_v202510_hybrid_numvec25 \
+# --temp=0.0 --max_len=2048 --random_seed=2025
 
 def main():
     args = parse_args()
     
     #check
-    if args.mode in ["rag-llm", "rag-llm-batch"]:
-        if not args.context_db:
+    if args.mode in ["rag-llm", "rag-llm-batch"]:  # rag-llm 
+        if not args.context_db:     # "fda"
             raise ValueError("`--context_db` is required when mode is 'rag-llm'")
         if not args.model_api:
             raise ValueError("`--model_api` is required when mode is 'rag-llm'")        
@@ -41,7 +64,7 @@ def main():
         run_llm_main(args)
     elif args.mode == 'llm-batch':
         run_llm_batch_main(args)
-    elif args.mode == 'rag-llm':
+    elif args.mode == 'rag-llm':    # this
         run_ragllm_main(args)
     elif args.mode == 'rag-llm-batch':
         run_ragllm_batch_main(args)

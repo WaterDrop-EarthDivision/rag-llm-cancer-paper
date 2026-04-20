@@ -182,9 +182,9 @@ def load_entities(
     base_path = Path("context_retriever/entities")
     
     #load DB entity
-    if db in ['fda', 'ema']:
+    if db in ['fda', 'ema']:    # fda
         with open(base_path / f"moalmanac_{db}_ner_entities__{version}.json") as f:
-            db_entity = json.load(f)
+            db_entity = json.load(f)    # 
     elif db == 'civic':
         with open(base_path / f"civic_ner_entities__2025-10-01.json") as f:
             db_entity = json.load(f)
@@ -195,9 +195,9 @@ def load_entities(
     if mode == "test_synthetic":
         with open(base_path / f"synthetic_query_ner_entities__{version}.json") as f:
             query_entity = json.load(f)
-    elif mode == "test_realworld":
+    elif mode == "test_realworld":  # test_realworld
         with open(base_path / "real_world_query_ner_entities__v1.json") as f:
-            query_entity = json.load(f)
+            query_entity = json.load(f) # 真实世界
     elif mode == "deploy":
         if query is None or not isinstance(query, str):
             raise ValueError("query (str) required for deploy mode")

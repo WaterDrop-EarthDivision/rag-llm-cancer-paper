@@ -49,7 +49,7 @@ def load_context(version: str, db: str, db_type: str):
         #1) read context db
         with open(ctx_path, "r") as f:
             context = json.load(f)
-        #2) read context index
+        #2) read context index  阅读上下文索引  FAISS构建好的向量检索索引。
         index = faiss.read_index(index_path)
     #civic db 
     elif db == 'civic':
@@ -117,7 +117,7 @@ def create_context(db: dict) -> str:
 
 
     
-def update_db_files(version: str, organizations: list, force_rebuild=False):
+def update_db_files(version: str, organizations: list, force_rebuild=False):        # 主更新函数
     """
     Updates MOAlamanc context DB.
     Args:
